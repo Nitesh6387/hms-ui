@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-const Login = () => {
+const SignIn = () => {
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-800">
             <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
@@ -29,4 +29,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default SignIn
