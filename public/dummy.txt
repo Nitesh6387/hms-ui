@@ -1,0 +1,178 @@
+//doctor register
+"use client"
+import Link from 'next/link'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const schema = yup
+    .object()
+    .shape({
+        name: yup.string().required(),
+        email: yup.string().required().email(),
+        phone: yup.number().required(),
+        password: yup.string().required().min(3).max(16),
+        department: yup.string().required(),
+        experties: yup.string().required(),
+        experience: yup.string().required(),
+        qualification: yup.string().required(),
+        fee: yup.string().required(),
+        address: yup.string().required(),
+        profile: yup.mixed().test("Img is required field", (value:any) => value.length > 0),
+    })
+    .required();
+const DoctorRegister = () => {
+    const { register, handleSubmit, formState: { errors }, } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    const registerDoctor = (data: any) => {
+        console.log(data);
+
+    }
+    return (
+        <div className="flex items-center justify-center p-8 bg-gray-200">
+            <div className="w-10/12 p-6 bg-white rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold text-center ">Doctor Registation form</h2>
+                <form onSubmit={handleSubmit((d) => registerDoctor(d))} className='md:grid grid-cols-2 gap-4'>
+                    <div className="">
+                        <label className="block text-sm font-medium">Name</label>
+                        <input type="text" {...register('name')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your name" />
+                        {errors.name?.message && <p className='text-rose-500'>{errors.name?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Email</label>
+                        <input type="text" {...register('email')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your email" />
+                        {errors.email?.message && <p className='text-rose-500'>{errors.email?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Phone</label>
+                        <input type="text" {...register('phone')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your Mobile Number" />
+                        {errors.phone?.message && <p className='text-rose-500'>{errors.phone?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Password</label>
+                        <input type="text" {...register('password')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your Mobile Password" />
+                        {errors.password?.message && <p className='text-rose-500'>{errors.password?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Department</label>
+                        <input type="text" {...register('department')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your DepartMent" />
+                        {errors.department?.message && <p className='text-rose-500'>{errors.department?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Experties</label>
+                        <input type="text" {...register('experties')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your Experties" />
+                        {errors.experties?.message && <p className='text-rose-500'>{errors.experties?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Experience</label>
+                        <input type="text" {...register('experience')} className="w-full mt-1 p-2 border rounded" placeholder="Experience Years" />
+                        {errors.experience?.message && <p className='text-rose-500'>{errors.experience?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Qualification</label>
+                        <input type="text" {...register('qualification')} className="w-full mt-1 p-2 border rounded" placeholder="Enter Qualification Details" />
+                        {errors.qualification?.message && <p className='text-rose-500'>{errors.qualification?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Fee</label>
+                        <input type="text" {...register('fee')} className="w-full mt-1 p-2 border rounded" placeholder="Enter Fee charge" />
+                        {errors.fee?.message && <p className='text-rose-500'>{errors.fee?.message}</p>}
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium">Address</label>
+                        <input type="text" {...register('address')} className="w-full mt-1 p-2 border rounded" placeholder="Enter your Address" />
+                        {errors.address?.message && <p className='text-rose-500'>{errors.address?.message}</p>}
+                    </div>
+
+                    <div className="">
+                        <label className="block text-sm font-medium">Profile</label>
+                        <input type="file" {...register('profile')} className="w-full mt-1 p-2 border rounded" placeholder="Upload Profile" />
+                        {errors.profile?.message && <p className='text-rose-500'>{errors.profile?.message}</p>}
+                    </div>
+                    <button type="submit" className="mt-4 w-fit px-8 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 col-span-2 ">
+                        Sign Up
+                    </button>
+                </form>
+                <p className="text-center text-sm mt-4">
+                    Already have an account?
+                    <Link href="/signin">
+                        <span className="text-blue-600 hover:underline">Sign In here</span>
+                    </Link>
+                </p>
+            </div>
+        </div>
+    )
+}
+
+export default DoctorRegister;
+
+
+
+
+
+//doctordashboard
+
+"use client"
+
+import React from 'react';
+import Link from 'next/link';
+
+const DashboardDoctor = ({ children = null }) => {
+    const menus = [
+        {
+            name: "Dashboard",
+            href: '/dashboard'
+        },
+        {
+            name: "Patient",
+            href: '/patient'
+        },
+        {
+            name: "Dashboard",
+            href: '/dashboard'
+        },
+        {
+            name: "Patient",
+            href: '/patient'
+        },
+        {
+            name: "Dashboard",
+            href: '/dashboard'
+        },
+    ]
+    return (
+        <div className="min-h-screen flex">
+            <div className='w-2/12 bg-gray-800 text-white py-4 flex flex-col'>
+                <h2 className='text-xl font-bold mb-6'>Doctor Panel</h2>
+                <nav className='flex flex-col gap-4'>
+                    {
+                        menus.map((menu: any, index: any) => (
+                            <Link key={index} href={menu.href} className='py-4 hover:bg-blue-500 ps-2'>
+                                {menu.name}
+                            </Link>
+                        ))
+                    }
+                    <button className='mt-auto hover:bg-rose-400'>
+                        Logout
+                    </button>
+                </nav>
+            </div>
+
+            <div className='w-10/12 bg-gray-100'>
+
+                <div className='h-[10vh] bg-white shadow-md flex items-center justify-between px-6'>
+                    <p className='text-lg font-semibold'>Welcome, Nitesh Verma</p>
+                    <button className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'>Profile</button>
+                </div>
+
+                <div className='p-6'>
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default DashboardDoctor;
