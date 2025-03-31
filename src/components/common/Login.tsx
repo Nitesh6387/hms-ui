@@ -42,7 +42,7 @@ const Login = () => {
   return (
     <div className="flex justify-center gap-16 items-center py-16 ">
       <div className=" hidden md:block">
-        <Image alt="login" width={600} height={600}  src="/Images/loginimg.svg" />
+        <Image alt="login" width={600} height={600} src="/Images/loginimg.svg" />
       </div>
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg border border-gray-200">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Login</h2>
