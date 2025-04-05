@@ -10,8 +10,7 @@ import Link from 'next/link';
 
 const doctorSchema = yup.object().shape({
   name: yup.string().min(2).max(50).required("Name is required"),
-  // departmentId: yup.string().oneOf(["Cardiology", "Dermatology", "Neurology", "Pediatrics", "Orthopedics"], "Invalid department").required(),
-  departmentId: yup.string().max(2).required(),
+  departmentId: yup.string().oneOf(["Cardiology", "Dermatology", "Neurology", "Pediatrics", "Orthopedics"], "Invalid department").required(),
   specialist: yup.string().min(2).max(100).required("Expertise is required"),
   qualifications: yup.string().min(2).max(100).required("Qualifications are required"),
   contact: yup.string().matches(/\d{10}/, "Contact must be a 10-digit number").required(),
@@ -21,6 +20,7 @@ const doctorSchema = yup.object().shape({
   gender: yup.string().oneOf(["Male", "Female", "Other"], "Invalid gender").required(),
   email: yup.string().email("Invalid email address").required(),
   profile: yup.mixed().test("fileSize", "File is required", (value: any) => value?.length > 0).required(),
+  password: yup.string().required().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
   userType: yup.string().oneOf(["doctor", "patient"], "Invalid User Type").required(),
 });
 
@@ -31,12 +31,15 @@ const patientSchema = yup.object().shape({
   contact: yup.string().matches(/\d{10}/, "Contact must be a 10-digit number").required(),
   age: yup.number().typeError("Age must be a number").min(18).max(100).required(),
   profile: yup.mixed().test("fileSize", "File is required", (value: any) => value?.length > 0).required(),
+  password: yup.string().required().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
   userType: yup.string().oneOf(["doctor", "patient"], "Invalid User Type").required(),
 });
 
 const UserRegister = () => {
   const [userType, setUserType] = useState("patient");
   const isDoctor = userType === "doctor";
+
+  const [passwordType, setPasswordType] = useState(true)
 
   const schema: any = isDoctor ? doctorSchema : patientSchema;
   const { register, handleSubmit, formState: { errors } }: any = useForm({
@@ -51,6 +54,7 @@ const UserRegister = () => {
       formData.append("contact", data.contact);
       formData.append("profile", data.profile[0]);
       formData.append("gender", data.gender);
+      formData.append("password", data.password);
       formData.append("age", data.age);
       formData.append("userType", data.userType);
       formData.append("departmentId", data.departmentId);
@@ -147,9 +151,24 @@ const UserRegister = () => {
                     {...register("age")}
                     className="w-full p-2 border rounded bg-gray-100 text-gray-900"
                     placeholder="Enter your age"
-                    type="number"
+                    type="text"
                   />
                   {errors.age && <p className="text-red-500 text-sm">{errors.age?.message}</p>}
+                </div>
+                <div className="mb-4 relative">
+                  <input
+                    {...register("password")}
+                    className="w-full p-2 border rounded bg-gray-100 text-gray-900"
+                    placeholder="Create password"
+                    type={passwordType ? 'password' : 'text'}
+                    id="password"
+                  />
+                  {errors.password && <p className="text-red-500 text-sm">{errors.password?.message}</p>}
+                  <button onClick={() => setPasswordType(!passwordType)} className="absolute top-1.5 right-4 cursor-pointer w-8 h-8 hover:bg-blue-500 hover:text-white rounded-full">
+                    {
+                      passwordType ? <i className="ri-eye-line"></i> : <i className="ri-eye-off-line"></i>
+                    }
+                  </button>
                 </div>
                 <div className="mb-4">
                   <input
@@ -181,23 +200,12 @@ const UserRegister = () => {
                     {...register("departmentId")}
                     className="w-full p-2 border rounded bg-gray-100 text-gray-900"
                   >
-
-                    {/* here in value property the department id is given randomly you will connect with your table  */}
                     <option value="">Select Department</option>
-                    <option value={1}>Cardiology</option>
-                    <option value={2}>Dermatology</option>
-                    <option value={3}>Neurology</option>
-                    <option value={4}>Pediatrics</option>
-                    <option value={5}>Orthopedics</option>
-
-
-                    {/* this was defined previously */}
-                    
-                    {/* <option value="Cardiology">Cardiology</option>
+                    <option value="Cardiology">Cardiology</option>
                     <option value="Dermatology">Dermatology</option>
                     <option value="Neurology">Neurology</option>
                     <option value="Pediatrics">Pediatrics</option>
-                    <option value="Orthopedics">Orthopedics</option> */}
+                    <option value="Orthopedics">Orthopedics</option>
                   </select>
                   {errors.departmentId && <p className="text-red-500 text-sm">{errors.departmentId?.message}</p>}
                 </div>
@@ -273,7 +281,21 @@ const UserRegister = () => {
                   />
                   {errors.email && <p className="text-red-500 text-sm">{errors.email?.message}</p>}
                 </div>
-
+                <div className="mb-4 relative">
+                  <input
+                    {...register("password")}
+                    className="w-full p-2 border rounded bg-gray-100 text-gray-900"
+                    placeholder="Create password"
+                    type={passwordType ? 'password' : 'text'}
+                    id="password"
+                  />
+                  {errors.password && <p className="text-red-500 text-sm">{errors.password?.message}</p>}
+                  <button type="button" onClick={() => setPasswordType(!passwordType)} className="absolute top-1.5 right-4 cursor-pointer w-8 h-8 hover:bg-blue-500 hover:text-white rounded-full">
+                    {
+                      passwordType ? <i className="ri-eye-line"></i> : <i className="ri-eye-off-line"></i>
+                    }
+                  </button>
+                </div>
                 <div className="mb-4">
                   <input
                     {...register("profile")}

@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 import Link from 'next/link';
-
+import Image from 'next/image';
 const UserLayout = ({ children }: any) => {
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -24,8 +24,15 @@ const UserLayout = ({ children }: any) => {
             <nav className="bg-white text-black p-4 shadow-gray-800  shadow mb-1 sticky top-0 left-0 z-50">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <div className="flex items-center">
-                        <Link href="/" className="text-2xl font-bold text-cyan-600">
-                            Global Health Center
+                        <Link href="/" className="text-2xl font-bold text-cyan-600 flex items-center">
+                            {/* Global Health Center */}
+                            <Image
+                                src="/Images/clogo.jpg"
+                                alt="Doctor"
+                                width={50}
+                                height={50}
+                                className=""
+                            />Global Health Center
                         </Link>
                     </div>
 

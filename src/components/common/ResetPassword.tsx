@@ -3,8 +3,16 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useSearchParams } from "next/navigation";
+import { resetUserPassword } from "@/Services";
+import { swalFire } from "@/Helpers/SwalFire";
 
 const schema = yup.object().shape({
+
+  userType: yup
+    .string()
+    .oneOf(["admin", "doctor", "patient"], "Invalid User type")
+    .required("User type is required"),
   password: yup
     .string()
     .required("Password is required")
@@ -19,6 +27,9 @@ const schema = yup.object().shape({
 });
 
 const ResetPassword = () => {
+  const params = useSearchParams()
+  const token = params.get('token')
+
   const {
     register,
     handleSubmit,
@@ -27,11 +38,34 @@ const ResetPassword = () => {
     resolver: yupResolver(schema),
   });
 
+  const handleResetPassword = async (data: any) => {
+    // delete data.confirmpassword
+    const updatedPayload = { ...data, token }
+    const res = await resetUserPassword(updatedPayload)
+    if (res.code === 200) {
+      swalFire("Reset Password", res?.message, "success")
+    } else {
+      swalFire("Reset Password", res?.message, "error")
+    }
+  }
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-200">
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Reset Password</h2>
-        <form onSubmit={handleSubmit((data) => console.log(data))}>
+        <form onSubmit={handleSubmit((data) => handleResetPassword(data))}>
+          <div className="mb-4">
+            <label className="block text-sm font-semibold">Select UserType:</label>
+            <select
+              {...register("userType")}
+              className="w-full p-2 border rounded bg-gray-100 text-gray-900"
+            >
+              <option value="patient">Patient</option>
+              <option value="admin">Admin</option>
+              <option value="doctor">Doctor</option>
+
+            </select>
+            {errors.userType && <p className="text-red-500 text-sm">{errors.userType?.message}</p>}
+          </div>
           <div className="mb-4">
             <input
               {...register("password")}

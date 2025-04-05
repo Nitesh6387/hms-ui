@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -7,6 +7,10 @@ import Link from "next/link";
 import { userAuthLogin } from "@/Services";
 import { swalFire } from "@/Helpers/SwalFire";
 import Image from "next/image";
+import { login } from "@/Redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+
 const schema = yup.object().shape({
   userType: yup
     .string()
@@ -23,14 +27,31 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
+
+  const router = useRouter()
+  const dispatch = useDispatch()
+  // const user = useSelector((state: any) => state.auth.session);
+
+  const [passwordType, setPasswordType] = useState(true)
+
   const loginFunction = async (data: any) => {
     const res = await userAuthLogin(data)
     if (res?.code == 200) {
       swalFire("Auth", res.message, "success")
+      dispatch(login(res?.data))
+      if (res?.data.userType == 'admin') {
+        router.push('/admin')
+      }
+      else {
+        
+        router.push('/dashboard')  //Here i have to manage dashboard using if else 
+      }
+
     } else {
       swalFire("Auth", res.message, "error")
     }
   }
+
   const {
     register,
     handleSubmit,
@@ -72,24 +93,29 @@ const Login = () => {
             {errors.email && <p className="text-red-500 text-sm">{errors.email?.message}</p>}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <input
               {...register("password")}
               className="w-full p-2 border rounded bg-gray-100 text-gray-900"
               placeholder="Enter your password"
-              type="password"
+              type={passwordType ? 'password' : 'text'}
               id="password"
             />
             {errors.password && <p className="text-red-500 text-sm">{errors.password?.message}</p>}
+            <button type="button" onClick={() => setPasswordType(!passwordType)} className="absolute top-1.5 right-4 cursor-pointer w-8 h-8 hover:bg-blue-500 hover:text-white rounded-full">
+              {
+                passwordType ? <i className="ri-eye-line"></i> : <i className="ri-eye-off-line"></i>
+              }
+            </button>
           </div>
 
           <div className="flex justify-between text-sm text-blue-500">
             <Link href="/forget-password" className="hover:underline">
               Forget Password?
             </Link>
-            <Link href="/reset-password" className="hover:underline">
+            {/* <Link href="/reset-password" className="hover:underline">
               Reset Password?
-            </Link>
+            </Link> */}
           </div>
 
           <button
@@ -99,7 +125,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className="mt-4">
+        <div className="mt-4 text-center">
           <p>Don't have an account? <Link className="text-blue-600" href='/register'>Register</Link> </p>
         </div>
       </div>

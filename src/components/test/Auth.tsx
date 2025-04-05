@@ -1,14 +1,18 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "@/Redux/slices/authSlice";
+import { useEffect } from "react";
 // Authentication component 
 export default function Auth() {
-    const user = useSelector((state: any) => state.auth.user);
-    const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
+    const user = useSelector((state: any) => state.auth.session);
     const dispatch = useDispatch();
+    useEffect(()=>{
+        console.log(user);
+        
+    },[user])
     return (
         <div className="text-center">
-            {isAuthenticated ? (
+             {user!=null ? (
                 <>
                     <h2>Welcome, {user}</h2>
                     <button onClick={() => dispatch(logout())}>Logout</button>

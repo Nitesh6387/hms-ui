@@ -1,12 +1,21 @@
-import DashboardDoctor from '@/components/Doctor/DashboardDoctor'
-import React from 'react'
-
+"use client"
+import Dashboard from '@/components/common/Dashboard'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 function page() {
-    return (
-        <DashboardDoctor>
-            <h2 className='text-center font-semibold text-3xl'>Dashboard page</h2>
-        </DashboardDoctor>
-    )
+  const router = useRouter()
+  const user = useSelector((state: any) => state.auth.session);
+  useEffect(() => {
+    // if (user == null) {
+    //   router.push('/login')
+    // }
+  }, [])
+  return (
+    <Dashboard>
+      <h2>Dashboard Area</h2>
+    </Dashboard>
+  )
 }
 
 export default page
