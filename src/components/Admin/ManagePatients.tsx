@@ -4,38 +4,36 @@ import { BASEURL, fetchPatientsData } from '@/Services';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { userSession } from '@/Helpers/userSession';
 
 const ManagePatients = () => {
   const router = useRouter()
-  const user = useSelector((state: any) => state.auth.session);
+  const user = userSession()
   const [patientData, setpatientData] = useState([])
+  const token = user?.jwtToken
   useEffect(() => {
-    // if (user == null) {
-    //   router.push('/login')
-    // };
     const fetchData = async () => {
-      const result = await fetchPatientsData(user?.jwtToken)
+      const result = await fetchPatientsData(token)
       setpatientData(result.data)
     }
     fetchData()
 
   }, [])
   return (
-    <div>
+    <div className='min-h-screen bg-gray-100'>
       <div className="relative overflow-x-auto p-4">
         <h2 className="text-center mb-4 text-4xl font-bold">Manage Patients</h2>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 z-0">
           <thead className="text-xs  text-white uppercase bg-gray-50 dark:bg-gray-700" >
             <tr>
               <th scope="col" className="px-6 py-3">
-                Doctor name
+                Name
               </th>
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Contact Number
+                Contact
               </th>
               <th scope="col" className="px-6 py-3">
                 Gender

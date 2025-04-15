@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +6,7 @@ import { logout } from "@/Redux/slices/authSlice";
 import { swalFire } from "@/Helpers/SwalFire";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-const Dashboard = ({ children }) => {
+const Dashboard = ({ children }: any) => {
     const router = useRouter()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -16,29 +15,31 @@ const Dashboard = ({ children }) => {
         if (session == null) {
             router.push('/login')
         }
-    })
+    }, [])
     const adminMenus = [
         { name: "Dashboard", href: "/admin", icon: 'ri-dashboard-line' },
         { name: "Manage Doctors", href: "/admin/doctors", icon: 'ri-group-3-line' },
         { name: "Manage Patients", href: "/admin/patients", icon: 'ri-group-3-line' },
         { name: "Manage Appointments", href: "/admin/appointments", icon: 'ri-file-chart-line' },
+        { name: "Manage Department", href: "/admin/departments", icon: 'ri-file-chart-line' },
         { name: "View Reports", href: "/admin/reports", icon: 'ri-file-chart-line' },
         { name: "Settings", href: "admin/settings", icon: 'ri-settings-line' },
         // { name: "Admin Panel", href: "/admin", icon: 'ri-user-shared-line' },
     ];
     const doctorMenus = [
         { name: "Dashboard", href: "/dashboard", icon: 'ri-dashboard-line' },
-        { name: "My Patients", href: "dashboard/patients", icon: 'ri-group-3-line' },
-        { name: "My Appointments", href: "dashboard/appointments", icon: 'ri-file-chart-line' },
-        { name: "My Reports", href: "dashboard/reports", icon: 'ri-file-chart-line' },
+        { name: "My Patients", href: "doctor/patients", icon: 'ri-group-3-line' },
+        { name: "My Appointments", href: "doctor/appointments", icon: 'ri-file-chart-line' },
+        { name: "My Reports", href: "doctor/reports", icon: 'ri-file-chart-line' },
         { name: "Settings", href: "/settings", icon: 'ri-settings-line' },
         { name: "My Profile", href: "/profile", icon: 'ri-user-line' }
     ]
     const userMenus = [
         { name: "Dashboard", href: "/dashboard", icon: 'ri-dashboard-line' },
-        { name: "My Appointments", href: "dashboard/appointments", icon: 'ri-file-chart-line' },
-        { name: "My Reports", href: "dashboard/reports", icon: 'ri-file-chart-line' },
-        { name: "View Doctors", href: "dashboard/doctors", icon: 'ri-user-line' },
+        { name: "My Appointments", href: "user/appointments", icon: 'ri-file-chart-line' },
+        { name: "Book New Appointment", href: "user/bookappointment", icon: 'ri-file-chart-line' },
+        { name: "My Reports", href: "user/reports", icon: 'ri-file-chart-line' },
+        { name: "View Doctors", href: "user/doctors", icon: 'ri-user-line' },
         { name: "Settings", href: "/settings", icon: 'ri-settings-line' },
         { name: "My Profile", href: "/profile", icon: 'ri-user-line' }
     ]
@@ -102,7 +103,7 @@ const Dashboard = ({ children }) => {
 
             <div className="w-full lg:w-10/12 flex flex-col h-screen">
 
-                <div className="h-[10vh] bg-white shadow-md flex items-center justify-between px-6">
+                <div className="h-[10vh] bg-gray-800 text-white shadow-md flex items-center justify-between px-6 md:border-s-2 border-gray-200">
                     <button
                         className="lg:hidden bg-gray-800 text-white px-4 py-2 rounded-md"
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}

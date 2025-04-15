@@ -93,6 +93,9 @@ const UserLayout = ({ children }: any) => {
                     <Link href="/about" className="block py-2">
                         About
                     </Link>
+                    <Link href="/login" className="block py-2">
+                        Login
+                    </Link>
                     <Link href="/services" className="block py-2">
                         Services
                     </Link>

@@ -34,7 +34,7 @@ const ForgetPassword = () => {
   }
 
   return (
-    <div className="flex justify-center items-center py-16  gap-16">
+    <div className="flex justify-center items-center py-16 gap-16">
       <div className=" hidden md:block">
         <Image alt="login" width={600} height={600} src="/Images/forgetPass.svg" />
       </div>

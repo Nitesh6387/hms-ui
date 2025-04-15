@@ -20,10 +20,10 @@ const ManageDoctors = () => {
 
   }, [])
   return (
-    <div>
+    <div className='min-h-screen bg-gray-100'>
       <div className="relative overflow-x-auto p-4">
         <h2 className="text-center mb-4 text-4xl font-bold">Manage Doctors</h2>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 overflow-scroll">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -36,11 +36,14 @@ const ManageDoctors = () => {
                 Contact Number
               </th>
               <th scope="col" className="px-6 py-3">
-                Address
+                Avl. Days
               </th>
               <th scope="col" className="px-6 py-3">
-                Profile
+                Address
               </th>
+              {/* <th scope="col" className="px-6 py-3">
+                Profile
+              </th> */}
               <th scope="col" className="px-6 py-3">
                 Actions
               </th>
@@ -60,19 +63,14 @@ const ManageDoctors = () => {
                     {doctor?.contact}
                   </td>
                   <td className="px-6 py-4">
-                    {doctor?.address}
+                    {doctor?.availableDays.join(",")}
                   </td>
                   <td className="px-6 py-4">
-                    {/* {doctor?.profile} */}
-                    {/* <Image
-                      src={`${BASEURL}/static/${doctor?.profile}`}
-                      alt="Doctor"
-                      width={200}
-                      height={200}
-                      className="rounded-4xl shadow-lg"
-                    /> */}
-                    <img src={`${BASEURL}/static/${doctor?.profile}`} alt={`profile`} className='rounded-full w-10 h-10 object-cover' />
+                    {doctor?.address}
                   </td>
+                  {/* <td className="px-6 py-4">
+                    <img src={`${BASEURL}/static/${doctor?.profile}`} alt={`profile`} className='rounded-full w-10 h-10 object-cover' />
+                  </td> */}
                   <td className="px-6 py-4">
                     <button className='bg-blue-500 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-green-500 '>Edit</button>
                   </td>
@@ -82,7 +80,6 @@ const ManageDoctors = () => {
           </tbody>
         </table>
       </div>
-
     </div>
   )
 }

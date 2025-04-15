@@ -5,9 +5,8 @@ import Image from "next/image";
 
 const Hero = () => {
   return (
-    <section className="relative flex items-center justify-center md:py-24 my-16 px-6 md:px-16  ">
+    <section className="relative flex items-center justify-center md:py-24 my-5 px-6 md:px-16  bg-gray-100">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-
         {/* Left Content */}
         <div className="text-center md:text-left max-w-2xl ">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">

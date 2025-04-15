@@ -2,11 +2,11 @@ const InfoSection = () => {
   return (
     <section className="relative bg-gray-100 px-6 md:px-16 py-16">
       {/* Info Boxes (Now Positioned Above Hero Section) */}
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:-mt-32 z-10 relative">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:-mt-36 z-10 relative">
 
         {/* Online Appointment */}
         <div
-          className="bg-gray-800 p-6 rounded-lg border shadow-xl text-center transition-all duration-300 hover:shadow-2xl hover:scale-105 text-white"
+          className="bg-white text-black p-6 rounded-lg shadow-xl text-center transition-all duration-300 hover:shadow-2xl hover:scale-105"
         >
           <h2 className="text-2xl font-bold mb-3">Online Appointment</h2>
           <p className="mb-4">
@@ -19,7 +19,7 @@ const InfoSection = () => {
 
         {/* Hospital Working Days & Hours */}
         <div
-          className="bg-gray-800 p-6 rounded-lg border  shadow-xl text-center transition-all duration-300 hover:shadow-2xl hover:scale-105 text-white"
+          className="bg-white text-black p-6 rounded-lg shadow-xl text-center transition-all duration-300 hover:shadow-2xl hover:scale-105 "
         >
           <h2 className="text-2xl font-bold mb-3">Working Hours</h2>
           <p className="mb-2"><strong>Monday - Friday:</strong> 8:00 AM - 8:00 PM</p>
@@ -29,7 +29,7 @@ const InfoSection = () => {
 
         {/* Emergency Cases */}
         <div
-          className="bg-gray-800 p-6 rounded-lg border  shadow-xl text-center transition-all duration-300 hover:shadow-2xl hover:scale-105 text-white"
+          className="bg-white text-black p-6 rounded-lg shadow-xl text-center transition-all duration-300 hover:shadow-2xl hover:scale-105 "
         >
           <h2 className="text-2xl font-bold mb-3">Emergency Cases</h2>
           <p className="mb-4">

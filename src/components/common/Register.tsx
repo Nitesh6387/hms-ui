@@ -1,16 +1,17 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { userAuthRegister } from '@/Services';
+import { fetchDepartmentdata, userAuthRegister } from '@/Services';
 import { swalFire } from '@/Helpers/SwalFire';
 import Image from 'next/image';
 import Link from 'next/link';
+import { userSession } from '@/Helpers/userSession';
 
 const doctorSchema = yup.object().shape({
   name: yup.string().min(2).max(50).required("Name is required"),
-  departmentId: yup.string().oneOf(["Cardiology", "Dermatology", "Neurology", "Pediatrics", "Orthopedics"], "Invalid department").required(),
+  departmentId: yup.string().required(),
   specialist: yup.string().min(2).max(100).required("Expertise is required"),
   qualifications: yup.string().min(2).max(100).required("Qualifications are required"),
   contact: yup.string().matches(/\d{10}/, "Contact must be a 10-digit number").required(),
@@ -20,6 +21,9 @@ const doctorSchema = yup.object().shape({
   gender: yup.string().oneOf(["Male", "Female", "Other"], "Invalid gender").required(),
   email: yup.string().email("Invalid email address").required(),
   profile: yup.mixed().test("fileSize", "File is required", (value: any) => value?.length > 0).required(),
+  availableDays: yup.array().of(yup.string().oneOf(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]))
+    .min(1, "Select at least one available day")
+    .required("Available days are required"),
   password: yup.string().required().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/, "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
   userType: yup.string().oneOf(["doctor", "patient"], "Invalid User Type").required(),
 });
@@ -36,11 +40,18 @@ const patientSchema = yup.object().shape({
 });
 
 const UserRegister = () => {
+  const user = userSession()
   const [userType, setUserType] = useState("patient");
   const isDoctor = userType === "doctor";
-
   const [passwordType, setPasswordType] = useState(true)
-
+  const [departmentData, setDepartmentData] = useState([])
+  const fetchData = async () => {
+    const result = await fetchDepartmentdata(user?.jwtToken)
+    setDepartmentData(result.data)
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
   const schema: any = isDoctor ? doctorSchema : patientSchema;
   const { register, handleSubmit, formState: { errors } }: any = useForm({
     resolver: yupResolver(schema),
@@ -49,6 +60,10 @@ const UserRegister = () => {
   const registerFunction = async (data: any) => {
     try {
       const formData: any = new FormData();
+      data.availableDays?.forEach((day: any) => {
+        formData.append("availableDays", day);
+      });
+
       formData.append("name", data.name);
       formData.append("email", data.email);
       formData.append("contact", data.contact);
@@ -63,7 +78,6 @@ const UserRegister = () => {
       formData.append("experience", data.experience);
       formData.append("fees", data.fees);
       formData.append("address", data.address);
-
       const res = await userAuthRegister(formData);
       if (res?.code == 201) {
         swalFire("Auth", res.message, "success");
@@ -76,9 +90,9 @@ const UserRegister = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center py-16 bg-white p-8">
-      <div className="hidden md:block">
-        <Image alt="register" width={600} height={600} src="/Images/loginimg.svg" />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-16 bg-white p-8">
+      <div className="hidden lg:block">
+        <Image alt="register" width={800} height={800} src="/Images/loginimg.svg" />
       </div>
       <div className="w-full bg-white p-8 rounded-lg shadow-lg border border-gray-200">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Register</h2>
@@ -164,7 +178,7 @@ const UserRegister = () => {
                     id="password"
                   />
                   {errors.password && <p className="text-red-500 text-sm">{errors.password?.message}</p>}
-                  <button onClick={() => setPasswordType(!passwordType)} className="absolute top-1.5 right-4 cursor-pointer w-8 h-8 hover:bg-blue-500 hover:text-white rounded-full">
+                  <button type='button' onClick={() => setPasswordType(!passwordType)} className="absolute top-1.5 right-4 cursor-pointer w-8 h-8 hover:bg-blue-500 hover:text-white rounded-full">
                     {
                       passwordType ? <i className="ri-eye-line"></i> : <i className="ri-eye-off-line"></i>
                     }
@@ -201,16 +215,15 @@ const UserRegister = () => {
                     className="w-full p-2 border rounded bg-gray-100 text-gray-900"
                   >
                     <option value="">Select Department</option>
-                    <option value="Cardiology">Cardiology</option>
-                    <option value="Dermatology">Dermatology</option>
-                    <option value="Neurology">Neurology</option>
-                    <option value="Pediatrics">Pediatrics</option>
-                    <option value="Orthopedics">Orthopedics</option>
+                    {
+                      departmentData?.map((dept: any, index: any) => (
+                        <option value={dept?.id} key={index} className='uppercase'>{dept?.name}</option>
+                      ))
+                    }
                   </select>
                   {errors.departmentId && <p className="text-red-500 text-sm">{errors.departmentId?.message}</p>}
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
                   <input
@@ -231,7 +244,6 @@ const UserRegister = () => {
                   {errors.qualifications && <p className="text-red-500 text-sm">{errors.qualifications?.message}</p>}
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
                   <input
@@ -252,7 +264,6 @@ const UserRegister = () => {
                   {errors.experience && <p className="text-red-500 text-sm">{errors.experience?.message}</p>}
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="mb-4">
                   <input
@@ -296,7 +307,27 @@ const UserRegister = () => {
                     }
                   </button>
                 </div>
-                <div className="mb-4">
+
+                <div className="mb-4 col-span-2">
+                  <label className="block text-md font-bold text-gray-800 mb-1">Available Days</label>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, index) => (
+                      <label key={index} className="flex items-center space-x-1">
+                        <input
+                          type="checkbox"
+                          value={day}
+                          {...register("availableDays")}
+                          className="text-blue-500"
+                        />
+                        <span>{day}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.availableDays && (
+                    <p className="text-red-500 text-sm">{errors.availableDays.message}</p>
+                  )}
+                </div>
+                <div className="mb-4 col-span-2">
                   <input
                     {...register("profile")}
                     className="w-full border rounded-lg bg-gray-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 file:border-0 file:bg-blue-500 file:text-white file:py-2 file:px-4 file:rounded-lg"

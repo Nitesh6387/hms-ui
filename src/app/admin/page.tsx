@@ -1,12 +1,14 @@
+"use client"
 import Dashboard from '@/components/common/Dashboard'
+import Adminwrap from '@/HOC/Adminwrap'
 import React from 'react'
 
 function page() {
   return (
     <Dashboard>
-        <h2>Admin Dashboard</h2>
+        <h2>Dashboard Area</h2>
     </Dashboard>
   )
 }
 
-export default page
+export default Adminwrap(page)
