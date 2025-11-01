@@ -1,24 +1,47 @@
 "use client"
 import Adminwrap from '@/HOC/Adminwrap';
-import { BASEURL, fetchPatientsData } from '@/Services';
+import { deletePatient, fetchPatientsData } from '@/Services';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { userSession } from '@/Helpers/userSession';
+import { swalFire } from '@/Helpers/SwalFire';
 
 const ManagePatients = () => {
   const router = useRouter()
-  const user = userSession()
+  const session = userSession()
   const [patientData, setpatientData] = useState([])
-  const token = user?.jwtToken
+  const token = session?.jwtToken
+  const fetchData = async () => {
+    const result = await fetchPatientsData(token)
+    setpatientData(result.data)
+  }
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetchPatientsData(token)
-      setpatientData(result.data)
-    }
     fetchData()
-
   }, [])
+
+  const removeUser = async (id: any) => {
+    swalFire(
+      "Are you sure?",
+      "You won't be able to revert this!",
+      "warning"
+    ).then(async (result: any) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deletePatient(token, id);
+          if (res.success) {
+            swalFire("Deleted", res?.message, "success");
+            fetchData();
+          } else {
+            swalFire("Error", res?.message || "Something went wrong while deleting.", "error");
+          }
+        } catch (error) {
+          swalFire("Error", "Network or server error occurred.", "error");
+        }
+      }
+    });
+  };
+
   return (
     <div className='min-h-screen bg-gray-100'>
       <div className="relative overflow-x-auto p-4">
@@ -59,8 +82,9 @@ const ManagePatients = () => {
                   <td className="px-6 py-4">
                     {patient?.gender}
                   </td>
-                  <td className="px-6 py-4">
-                    <button className='bg-blue-500 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-green-500 '>Edit</button>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button className='bg-blue-500 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-blue-700 me-1.5'>Edit</button>
+                    <button onClick={() => removeUser(patient?.id)} className='bg-red-600 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-red-500 '>Remove</button>
                   </td>
                 </tr>
               ))

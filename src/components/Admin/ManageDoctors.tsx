@@ -19,6 +19,7 @@ const ManageDoctors = () => {
     fetchData()
 
   }, [])
+
   return (
     <div className='min-h-screen bg-gray-100'>
       <div className="relative overflow-x-auto p-4">
@@ -27,23 +28,23 @@ const ManageDoctors = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Doctor name
+                Name
               </th>
               <th scope="col" className="px-6 py-3">
                 Email
               </th>
-              <th scope="col" className="px-6 py-3">
+              {/* <th scope="col" className="px-6 py-3">
                 Contact Number
-              </th>
+              </th> */}
               <th scope="col" className="px-6 py-3">
                 Avl. Days
               </th>
               <th scope="col" className="px-6 py-3">
                 Address
               </th>
-              {/* <th scope="col" className="px-6 py-3">
+              <th scope="col" className="px-6 py-3">
                 Profile
-              </th> */}
+              </th>
               <th scope="col" className="px-6 py-3">
                 Actions
               </th>
@@ -59,20 +60,21 @@ const ManageDoctors = () => {
                   <td className="px-6 py-4">
                     {doctor?.email}
                   </td>
-                  <td className="px-6 py-4">
+                  {/* <td className="px-6 py-4">
                     {doctor?.contact}
-                  </td>
+                  </td> */}
                   <td className="px-6 py-4">
                     {doctor?.availableDays.join(",")}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {doctor?.address}
                   </td>
-                  {/* <td className="px-6 py-4">
-                    <img src={`${BASEURL}/static/${doctor?.profile}`} alt={`profile`} className='rounded-full w-10 h-10 object-cover' />
-                  </td> */}
                   <td className="px-6 py-4">
-                    <button className='bg-blue-500 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-green-500 '>Edit</button>
+                    <img src={`${BASEURL}/static/${doctor?.profile}`} alt={`profile`} className='rounded-full w-10 h-10 object-cover' />
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button className='bg-blue-500 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-blue-700 me-1.5'>Edit</button>
+                    <button className='bg-red-600 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-red-500 '>Remove</button>
                   </td>
                 </tr>
               ))

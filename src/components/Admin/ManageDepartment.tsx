@@ -21,6 +21,8 @@ const ManageDepartment = () => {
     const token = user?.jwtToken
     const [departmentData, setDepartmentData] = useState([])
     const [showEditForm, setShowEditForm] = useState(false);
+
+    const[editValue,setEditValue]=useState("")
     const handleClose = () => setShowEditForm(false);
     const handleShow = () => setShowEditForm(true);
 
@@ -33,8 +35,9 @@ const ManageDepartment = () => {
     useEffect(() => {
         fetchData()
         if (showEditForm) {
-            setValue("name", "dshfhj") //i have to use dynamic
+            setValue("name", editValue) //i have to use dynamic
         }
+        
     }, [showEditForm])
 
     const handleAddDepartment = async (data: any) => {
@@ -61,6 +64,10 @@ const ManageDepartment = () => {
         setShowEditForm(false)
     }
 
+    const handleEditClickDept=(deptName:any)=>{
+        setEditValue(deptName)
+        setShowEditForm(true)
+    }
     const handleDelteDept = async (id: any) => {
         Swal.fire({
             title: "Are you sure?",
@@ -142,7 +149,7 @@ const ManageDepartment = () => {
                                                 </th>
                                                 <td>
                                                     <button onClick={() => handleDelteDept(dept.id)} className='px-4 py-2 bg-red-700 text-white rounded-sm cursor-pointer hover:bg-red-500 me-1'>Delete</button>
-                                                    <button onClick={handleShow} className='bg-green-700 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-green-500 '>Edit</button>
+                                                    <button onClick={()=>handleEditClickDept(dept?.name)} className='bg-green-700 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-green-500 '>Edit</button>
                                                 </td>
                                             </tr>
                                         ))

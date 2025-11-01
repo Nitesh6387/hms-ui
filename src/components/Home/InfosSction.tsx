@@ -1,4 +1,10 @@
+"use client"
+
+import { useRouter } from "next/navigation";
+
+
 const InfoSection = () => {
+  const router=useRouter()
   return (
     <section className="relative bg-gray-100 px-6 md:px-16 py-16">
       {/* Info Boxes (Now Positioned Above Hero Section) */}
@@ -12,7 +18,7 @@ const InfoSection = () => {
           <p className="mb-4">
             Schedule an appointment with our expert doctors at your convenience.
           </p>
-          <button className="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-6 rounded-lg text-lg font-semibold transition">
+          <button onClick={()=>router.push('/user/bookappointment')} className="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-6 rounded-lg text-lg font-semibold transition">
             Book Now
           </button>
         </div>

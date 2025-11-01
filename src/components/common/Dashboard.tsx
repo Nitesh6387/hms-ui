@@ -36,10 +36,10 @@ const Dashboard = ({ children }: any) => {
     ]
     const userMenus = [
         { name: "Dashboard", href: "/dashboard", icon: 'ri-dashboard-line' },
-        { name: "My Appointments", href: "user/appointments", icon: 'ri-file-chart-line' },
-        { name: "Book New Appointment", href: "user/bookappointment", icon: 'ri-file-chart-line' },
-        { name: "My Reports", href: "user/reports", icon: 'ri-file-chart-line' },
-        { name: "View Doctors", href: "user/doctors", icon: 'ri-user-line' },
+        { name: "My Appointments", href: "/user/appointments", icon: 'ri-file-chart-line' },
+        { name: "Book New Appointment", href: "/user/bookappointment", icon: 'ri-file-chart-line' },
+        { name: "My Reports", href: "/user/reports", icon: 'ri-file-chart-line' },
+        // { name: "View Doctors", href: "/user/doctors", icon: 'ri-user-line' },
         { name: "Settings", href: "/settings", icon: 'ri-settings-line' },
         { name: "My Profile", href: "/profile", icon: 'ri-user-line' }
     ]
@@ -74,7 +74,7 @@ const Dashboard = ({ children }: any) => {
         });
     }
 
-    { if (!session) { return (<h2 className="text-center">You have to Login First</h2>) } };
+    { if (!session) { return (<h2 className="text-center text-lg font-bold">You have to Login First</h2>) } };
 
     return (
         <div className="flex h-screen">

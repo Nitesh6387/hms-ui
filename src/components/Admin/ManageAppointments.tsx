@@ -1,9 +1,9 @@
 "use client"
 import { userSession } from '@/Helpers/userSession'
 import Adminwrap from '@/HOC/Adminwrap'
-import { fetchAppointmentdata } from '@/Services'
+import { deleteAppointmentById, fetchAppointmentdata } from '@/Services'
 import React, { useEffect, useState } from 'react'
-
+import { swalFire } from '@/Helpers/SwalFire'
 const ManageAppointments = () => {
     const user = userSession()
     const token = user?.jwtToken
@@ -11,38 +11,66 @@ const ManageAppointments = () => {
 
     const fetchData = async () => {
         const result = await fetchAppointmentdata(token)
-        setAppointmentData(result.data)
+        // console.log(result);
+        setAppointmentData(result)
     }
+
+    const handleDelete = async (appointmentId: string) => {
+        const confirm = await swalFire(
+            "Are you sure?",
+            "You will not be able to recover this appointment!",
+            "warning"
+        );
+
+        if (!confirm.isConfirmed) return;
+
+        try {
+            const response = await deleteAppointmentById(appointmentId, token);
+            if (response?.success) {
+                await fetchData();
+                swalFire("Deleted!", "Appointment has been deleted.", "success");
+            } else {
+                swalFire("Failed", "Failed to delete the appointment.", "error");
+            }
+        } catch (error) {
+            console.error("Delete error:", error);
+            swalFire("Error", "Something went wrong while deleting.", "error");
+        }
+    };
+
     useEffect(() => {
         fetchData()
     }, [])
-    console.log(appointmentData);
 
     return (
         <div className="min-h-screen p-4 space-y-8 bg-gray-100">
             <div className='overflow-autorelative overflow-x-auto p-4'>
-                <table className="w-full text-center text-gray-500 dark:text-gray-400">
+                <h2 className="text-center mb-4 text-4xl font-bold">Manage Appointments</h2>
+                <table className="w-full text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">
                                 Sr.
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                PatientId
+                                Patient Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                DoctorId
+                                Doctor Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                            DepartmentId
+                                Department Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                            Date
+                                App. Date
                             </th>
                             <th scope="col" className="px-6 py-3">
-                            startTime
+                                Time
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Status
+                            </th>
+                            <th scope="col" className="px-6 py-4">
                                 Action
                             </th>
                         </tr>
@@ -54,24 +82,33 @@ const ManageAppointments = () => {
                                     <td className="px-6 py-4">
                                         {index + 1}
                                     </td>
-                                    <th scope="row" className='uppercase'>
-                                        {app?.patientId}
+                                    <th scope="row" className='capitalize'>
+                                        {app?.patient_name}
                                     </th>
                                     <td scope="row">
-                                        {app?.doctorId}
+                                        {app?.doctor_name}
                                     </td>
                                     <td scope="row" >
-                                        {app?.departmentId}
+                                        {app?.department_name}
+                                    </td>
+                                    <td scope="row" className='whitespace-nowrap'>
+                                        {/* {new Date(app?.apptbl_date).toLocaleDateString('en-CA')} */}
+                                        {new Date(app?.apptbl_date).toISOString().slice(0, 10)}
                                     </td>
                                     <td scope="row">
-                                        {app?.date}
+                                        {app?.apptbl_startTime}
                                     </td>
                                     <td scope="row">
-                                        {app?.startTime}
+                                        {app?.apptbl_status}
                                     </td>
-                                    <td>
-                                        {/* <button className='px-4 py-2 bg-red-700 text-white rounded-sm cursor-pointer hover:bg-red-500 me-1'>Delete</button> */}
-                                        <button className='bg-green-700 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-green-500 '>Edit</button>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <button className='bg-blue-500 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-blue-700 me-1.5'>Edit</button>
+                                        <button
+                                            onClick={() => handleDelete(app.apptbl_id)}
+                                            className='bg-red-600 cursor-pointer px-6 rounded-md py-2 text-white hover:bg-red-500'
+                                        >
+                                            Remove
+                                        </button>
                                     </td>
                                 </tr>
                             ))

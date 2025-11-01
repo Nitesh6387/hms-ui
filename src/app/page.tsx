@@ -1,9 +1,10 @@
 "use client"
 
-import BookingAppointment from "@/components/Home/BookingAppointment";
+// import BookingAppointment from "@/components/Home/BookingAppointment";
 import Cout from "@/components/Home/Cout";
 import Hero from "@/components/Home/Hero";
 import InfoSection from "@/components/Home/InfosSction";
+import Services from "@/components/Services";
 import Swipper from "@/components/Swipper";
 import UserLayout from "@/components/UserLayout";
 export default function Home() {
@@ -13,7 +14,8 @@ export default function Home() {
       <Hero />
       <InfoSection />
       <Cout />
-      <BookingAppointment />
+      <Services />
+      {/* <BookingAppointment /> */}
     </UserLayout>
   );
 }

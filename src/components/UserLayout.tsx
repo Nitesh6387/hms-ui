@@ -148,9 +148,9 @@ const UserLayout = ({ children }: any) => {
                         {/* Contact Info */}
                         <div>
                             <h2 className="text-xl font-semibold mb-4">Contact Us</h2>
-                            <p className="text-gray-400">📍 15/65 Vikas Nagar LKO, UP</p>
-                            <p className="text-gray-400">📞 +91 9645821578</p>
-                            <p className="text-gray-400">✉ support@admin.com</p>
+                            <p className="text-gray-400 cursor-pointer"><i className="ri-map-pin-line hover:text-blue-500 text-lg"></i> 15/65 Vikas Nagar LKO, UP</p>
+                            <p className="text-gray-400 cursor-pointer"><i className="ri-phone-line hover:text-blue-500 text-lg"></i> +91 9645821578</p>
+                            <p className="text-gray-400 cursor-pointer"><i className="ri-mail-line hover:text-blue-500 text-lg"></i> support@admin.com</p>
                         </div>
                     </div>
 

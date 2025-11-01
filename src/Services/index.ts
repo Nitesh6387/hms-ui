@@ -39,6 +39,14 @@ export const fetchPatientsData = async (token: any) => {
     });
     return response?.data
 }
+export const deletePatient = async (token: any, id: any) => {
+    const response = await axios.delete(`${BASEURL}/v1/api/admin/removePatient/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response?.data
+}
 
 export const adminAddDepartment = async (payload: any, token: any) => {
     const response = await axios.post(`${BASEURL}/v1/api/admin-add-department`, payload, {
@@ -75,7 +83,7 @@ export const getdoctByDepartmentIDService = async (id: any, token: any) => {
 }
 
 export const fetchAppointmentdata = async (token: any) => {
-    const response = await axios.get(`${BASEURL}/v1/api/admin/appointments`, {
+    const response = await axios.get(`${BASEURL}/v1/api/admin/getappointmentdata`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -93,13 +101,24 @@ export const bookdoctorAppointment = async (payload: any, token: any) => {
 }
 
 export const fetchAppointmentByPatientId = async (id: any, token: any) => {
-    const response = await axios.get(`${BASEURL}/v1/api/get-appointment-by-patient?patiendId=${id}`, {
+    const response = await axios.get(`${BASEURL}/v1/api/get-appointment-by-patientId?patientId=${id}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
     return response?.data
 }
+
+
+export const deleteAppointmentById = async (appointmentId: string, token: string) => {
+  const response = await axios.delete(`${BASEURL}/v1/api/delete-appointment`, {
+    params: { appointmentId },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response?.data;
+};
 
 
 
