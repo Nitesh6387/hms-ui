@@ -16,33 +16,33 @@ const Dashboard = ({ children }: any) => {
             router.push('/login')
         }
     }, [])
-    const adminMenus = [
-        { name: "Dashboard", href: "/admin", icon: 'ri-dashboard-line' },
-        { name: "Manage Doctors", href: "/admin/doctors", icon: 'ri-group-3-line' },
-        { name: "Manage Patients", href: "/admin/patients", icon: 'ri-group-3-line' },
-        { name: "Manage Appointments", href: "/admin/appointments", icon: 'ri-file-chart-line' },
-        { name: "Manage Department", href: "/admin/departments", icon: 'ri-file-chart-line' },
-        { name: "View Reports", href: "/admin/reports", icon: 'ri-file-chart-line' },
-        { name: "Settings", href: "admin/settings", icon: 'ri-settings-line' },
-        // { name: "Admin Panel", href: "/admin", icon: 'ri-user-shared-line' },
-    ];
-    const doctorMenus = [
-        { name: "Dashboard", href: "/dashboard", icon: 'ri-dashboard-line' },
-        { name: "My Patients", href: "doctor/patients", icon: 'ri-group-3-line' },
-        { name: "My Appointments", href: "doctor/appointments", icon: 'ri-file-chart-line' },
-        { name: "My Reports", href: "doctor/reports", icon: 'ri-file-chart-line' },
-        { name: "Settings", href: "/settings", icon: 'ri-settings-line' },
-        { name: "My Profile", href: "/profile", icon: 'ri-user-line' }
-    ]
-    const userMenus = [
-        { name: "Dashboard", href: "/dashboard", icon: 'ri-dashboard-line' },
-        { name: "My Appointments", href: "/user/appointments", icon: 'ri-file-chart-line' },
-        { name: "Book New Appointment", href: "/user/bookappointment", icon: 'ri-file-chart-line' },
-        { name: "My Reports", href: "/user/reports", icon: 'ri-file-chart-line' },
-        // { name: "View Doctors", href: "/user/doctors", icon: 'ri-user-line' },
-        { name: "Settings", href: "/settings", icon: 'ri-settings-line' },
-        { name: "My Profile", href: "/profile", icon: 'ri-user-line' }
-    ]
+   const adminMenus = [
+  { name: "Dashboard", href: "/admin", icon: "ri-dashboard-line" },
+  { name: "Manage Doctors", href: "/admin/doctors", icon: "ri-group-3-line" },
+  { name: "Manage Patients", href: "/admin/patients", icon: "ri-group-3-line" },
+  { name: "Manage Appointments", href: "/admin/appointments", icon: "ri-file-chart-line" },
+  { name: "Manage Department", href: "/admin/departments", icon: "ri-file-chart-line" },
+  { name: "Reports", href: "/admin/reports", icon: "ri-file-chart-line" },
+  { name: "Settings", href: "/admin/settings", icon: "ri-settings-line" },
+];
+
+const doctorMenus = [
+  { name: "Dashboard", href: "/doctor/appointments", icon: "ri-dashboard-line" },
+  { name: "My Patients", href: "/doctor/patients", icon: "ri-group-3-line" },
+  { name: "My Appointments", href: "/doctor/appointments", icon: "ri-file-chart-line" },
+  { name: "Reports", href: "/doctor/reports", icon: "ri-file-chart-line" },
+  { name: "Settings", href: "/doctor/settings", icon: "ri-settings-line" },
+  { name: "My Profile", href: "/doctor/profile", icon: "ri-user-line" },
+];
+
+const userMenus = [
+  { name: "Dashboard", href: "/user/appointments", icon: "ri-dashboard-line" },
+  { name: "My Appointments", href: "/user/appointments", icon: "ri-file-chart-line" },
+  { name: "Book New Appointment", href: "/user/bookappointment", icon: "ri-file-chart-line" },
+  { name: "Reports", href: "/user/reports", icon: "ri-file-chart-line" },
+  { name: "Settings", href: "/user/settings", icon: "ri-settings-line" },
+  { name: "My Profile", href: "/user/profile", icon: "ri-user-line" },
+];
 
     let menus = []
     if (session?.userType === 'admin') {
@@ -96,8 +96,11 @@ const Dashboard = ({ children }: any) => {
                     ))}
                 </nav>
 
-                <button className="mt-auto py-3 px-3 rounded-md hover:bg-rose-400 transition">
-                    Logout
+                <button
+                    onClick={logoutUser}
+                    className="mt-auto py-3 px-3 rounded-md hover:bg-rose-400 transition text-left"
+                >
+                    <i className="ri-logout-box-r-line mr-2"></i>Logout
                 </button>
             </div>
 

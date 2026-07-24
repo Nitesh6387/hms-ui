@@ -35,22 +35,21 @@ const Login = () => {
   const [passwordType, setPasswordType] = useState(true)
 
   const loginFunction = async (data: any) => {
-    const res = await userAuthLogin(data)
-    if (res?.code == 200) {
-      swalFire("Auth", res.message, "success")
-      dispatch(login(res?.data))
-      if (res?.data.userType == 'admin') {
-        router.push('/admin')
-      }
-      else {
-        
-        router.push('/dashboard')  //Here i have to manage dashboard using if else 
-      }
-
+  const res = await userAuthLogin(data);
+  if (res?.code === 200) {
+    swalFire("Auth", res.message, "success");
+    dispatch(login(res?.data));
+    if (res?.data.userType === "admin") {
+      router.push("/admin");
+    } else if (res?.data.userType === "doctor") {
+      router.push("/doctor/appointments");
     } else {
-      swalFire("Auth", res.message, "error")
+      router.push("/user/appointments");
     }
+  } else {
+    swalFire("Auth", res.message, "error");
   }
+};
 
   const {
     register,
