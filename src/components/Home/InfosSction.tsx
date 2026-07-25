@@ -41,7 +41,7 @@ const InfoSection = () => {
           <p className="mb-4">
             In case of emergency, call our 24/7 support line for immediate assistance.
           </p>
-          <p className="text-xl font-bold text-cyan-600">+91 9645821578</p>
+          <p className="text-xl font-bold text-cyan-600">+91 6354553821</p>
         </div>
 
       </div>

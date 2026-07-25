@@ -27,12 +27,12 @@ const DoctorProfile = () => {
         if (res.data) {
           const data = res.data;
           setProfile({
-            name: data.doctor_name || "",
-            contact: data.doctor_contact || "",
-            address: data.doctor_address || "",
-            fees: data.doctor_fees || "",
-            availableDays: data.doctor_availableDays || [],
-            profile: data.doctor_profile || "",
+            name: data.doctor_name || data.name || "",
+            contact: data.doctor_contact || data.contact || "",
+            address: data.doctor_address || data.address || "",
+            fees: data.doctor_fees || data.fees || "",
+            availableDays: data.doctor_availableDays || data.availableDays || [],
+            profile: data.doctor_profile || data.profile || "",
           });
         }
       } catch (error) {
@@ -56,17 +56,16 @@ const DoctorProfile = () => {
       const res = await updateDoctorProfile(payload, token);
       if (res.code === 200) {
         swalFire("Updated", res.message, "success");
-        // Refetch to update profile image etc.
         const updated = await getDoctorProfile(token);
         if (updated.data) {
           const data = updated.data;
           setProfile({
-            name: data.doctor_name || "",
-            contact: data.doctor_contact || "",
-            address: data.doctor_address || "",
-            fees: data.doctor_fees || "",
-            availableDays: data.doctor_availableDays || [],
-            profile: data.doctor_profile || "",
+            name: data.doctor_name || data.name || "",
+            contact: data.doctor_contact || data.contact || "",
+            address: data.doctor_address || data.address || "",
+            fees: data.doctor_fees || data.fees || "",
+            availableDays: data.doctor_availableDays || data.availableDays || [],
+            profile: data.doctor_profile || data.profile || "",
           });
         }
       } else {
@@ -90,69 +89,64 @@ const DoctorProfile = () => {
 
   return (
     <Dashboard>
-      <div className="p-8 max-w-lg mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-        {profile.profile && (
-          <div className="mb-4">
-            <img
-              src={`${BASEURL}/static/${profile.profile}`}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover"
-            />
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            value={profile.name}
-            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-            className="border p-2 w-full"
-            placeholder="Name"
-          />
-          <input
-            type="text"
-            value={profile.contact}
-            onChange={(e) => setProfile({ ...profile, contact: e.target.value })}
-            className="border p-2 w-full"
-            placeholder="Contact"
-          />
-          <input
-            type="text"
-            value={profile.address}
-            onChange={(e) => setProfile({ ...profile, address: e.target.value })}
-            className="border p-2 w-full"
-            placeholder="Address"
-          />
-          <input
-            type="text"
-            value={profile.fees}
-            onChange={(e) => setProfile({ ...profile, fees: e.target.value })}
-            className="border p-2 w-full"
-            placeholder="Fees"
-          />
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Available Days</label>
-            <div className="flex flex-wrap gap-3 mt-1">
-              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-                <label key={day} className="flex items-center space-x-1">
-                  <input
-                    type="checkbox"
-                    checked={profile.availableDays.includes(day)}
-                    onChange={() => handleDayToggle(day)}
-                  />
-                  <span>{day}</span>
-                </label>
-              ))}
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-8">
+          <div className="flex items-center gap-4 mb-8">
+            {profile.profile ? (
+              <img
+                src={`${BASEURL}/static/${profile.profile}`}
+                alt="Profile"
+                className="w-20 h-20 rounded-full object-cover border-4 border-cyan-100"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-cyan-600 flex items-center justify-center text-white text-2xl font-bold">
+                {profile.name?.charAt(0)?.toUpperCase() || "D"}
+              </div>
+            )}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">My Profile</h2>
+              <p className="text-gray-500">{session?.email}</p>
             </div>
           </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? "Updating..." : "Update"}
-          </button>
-        </form>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input type="text" value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
+                <input type="text" value={profile.contact} onChange={(e) => setProfile({ ...profile, contact: e.target.value })} className="input-field" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                <input type="text" value={profile.address} onChange={(e) => setProfile({ ...profile, address: e.target.value })} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Consultation Fees ($)</label>
+                <input type="text" value={profile.fees} onChange={(e) => setProfile({ ...profile, fees: e.target.value })} className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Available Days</label>
+                <div className="flex flex-wrap gap-3">
+                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                    <label key={day} className="flex items-center gap-2 p-2 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                      <input type="checkbox" checked={profile.availableDays.includes(day)} onChange={() => handleDayToggle(day)} className="text-cyan-600" />
+                      <span className="text-sm">{day.substring(0, 3)}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button type="submit" disabled={loading} className="btn-primary">
+                {loading ? "Updating..." : "Update Profile"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </Dashboard>
   );

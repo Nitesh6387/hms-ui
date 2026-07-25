@@ -1,21 +1,16 @@
 "use client"
 import Dashboard from '@/components/common/Dashboard'
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
-function page() {
-  const router = useRouter()
-  const user = useSelector((state: any) => state.auth.session);
-  useEffect(() => {
-    // if (user == null) {
-    //   router.push('/login')
-    // }
-  }, [])
+import React from 'react'
+
+function DashboardPage() {
   return (
     <Dashboard>
-      <h2>Dashboard Area</h2>
+      <div className="p-8">
+        <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+        <p className="text-gray-600 mt-2">Welcome to your dashboard.</p>
+      </div>
     </Dashboard>
   )
 }
 
-export default page
+export default DashboardPage

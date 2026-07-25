@@ -8,7 +8,7 @@ import { userAuthLogin } from "@/Services";
 import { swalFire } from "@/Helpers/SwalFire";
 import Image from "next/image";
 import { login } from "@/Redux/slices/authSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 
 const schema = yup.object().shape({
@@ -19,7 +19,7 @@ const schema = yup.object().shape({
   email: yup.string().email("Invalid email address").required("Email is required"),
   password: yup
     .string()
-    .required()
+    .required("Password is required")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/,
       "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
@@ -27,29 +27,34 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-
-  const router = useRouter()
-  const dispatch = useDispatch()
-  // const user = useSelector((state: any) => state.auth.session);
-
-  const [passwordType, setPasswordType] = useState(true)
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [passwordType, setPasswordType] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const loginFunction = async (data: any) => {
-  const res = await userAuthLogin(data);
-  if (res?.code === 200) {
-    swalFire("Auth", res.message, "success");
-    dispatch(login(res?.data));
-    if (res?.data.userType === "admin") {
-      router.push("/admin");
-    } else if (res?.data.userType === "doctor") {
-      router.push("/doctor/appointments");
-    } else {
-      router.push("/user/appointments");
+    setLoading(true);
+    try {
+      const res = await userAuthLogin(data);
+      if (res?.code === 200) {
+        swalFire("Auth", res.message, "success");
+        dispatch(login(res?.data));
+        if (res?.data.userType === "admin") {
+          router.push("/admin");
+        } else if (res?.data.userType === "doctor") {
+          router.push("/doctor/appointments");
+        } else {
+          router.push("/user/appointments");
+        }
+      } else {
+        swalFire("Auth", res.message, "error");
+      }
+    } catch (error: any) {
+      swalFire("Auth", error.response?.data?.message || "Network error", "error");
+    } finally {
+      setLoading(false);
     }
-  } else {
-    swalFire("Auth", res.message, "error");
-  }
-};
+  };
 
   const {
     register,
@@ -60,72 +65,83 @@ const Login = () => {
   });
 
   return (
-    <div className="flex justify-center gap-16 items-center py-16 ">
-      <div className=" hidden md:block">
+    <div className="flex justify-center gap-16 items-center py-16 px-4">
+      <div className="hidden md:block">
         <Image alt="login" width={600} height={600} src="/Images/loginimg.svg" />
       </div>
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg border border-gray-200">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Login</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h2>
         <form onSubmit={handleSubmit((d) => loginFunction(d))}>
           <div className="mb-4">
-            <label className="block text-sm font-semibold">Login as:</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Login as:</label>
             <select
               {...register("userType")}
-              className="w-full p-2 border rounded bg-gray-100 text-gray-900"
+              className="input-field"
             >
               <option value="patient">Patient</option>
               <option value="admin">Admin</option>
               <option value="doctor">Doctor</option>
-
             </select>
-            {errors.userType && <p className="text-red-500 text-sm">{errors.userType?.message}</p>}
+            {errors.userType && <p className="input-error">{errors.userType?.message}</p>}
           </div>
 
           <div className="mb-4">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
             <input
               {...register("email")}
-              className="w-full p-2 border rounded bg-gray-100 text-gray-900"
+              className="input-field"
               placeholder="Enter your email"
               type="text"
-              id="email"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email?.message}</p>}
+            {errors.email && <p className="input-error">{errors.email?.message}</p>}
           </div>
 
           <div className="mb-4 relative">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
             <input
               {...register("password")}
-              className="w-full p-2 border rounded bg-gray-100 text-gray-900"
+              className="input-field pr-10"
               placeholder="Enter your password"
               type={passwordType ? 'password' : 'text'}
-              id="password"
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password?.message}</p>}
-            <button type="button" onClick={() => setPasswordType(!passwordType)} className="absolute top-1.5 right-4 cursor-pointer w-8 h-8 hover:bg-blue-500 hover:text-white rounded-full">
-              {
-                passwordType ? <i className="ri-eye-line"></i> : <i className="ri-eye-off-line"></i>
-              }
+            <button
+              type="button"
+              onClick={() => setPasswordType(!passwordType)}
+              className="absolute right-3 top-9 cursor-pointer text-gray-500 hover:text-gray-700"
+            >
+              <i className={passwordType ? "ri-eye-line text-lg" : "ri-eye-off-line text-lg"}></i>
             </button>
+            {errors.password && <p className="input-error">{errors.password?.message}</p>}
           </div>
 
-          <div className="flex justify-between text-sm text-blue-500">
-            <Link href="/forget-password" className="hover:underline">
-              Forget Password?
+          <div className="flex justify-end text-sm mb-4">
+            <Link href="/forget-password" className="text-cyan-600 hover:underline">
+              Forgot Password?
             </Link>
-            {/* <Link href="/reset-password" className="hover:underline">
-              Reset Password?
-            </Link> */}
           </div>
 
           <button
             type="submit"
-            className="w-full mt-4 p-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded"
+            disabled={loading}
+            className="btn-primary w-full"
           >
-            Login
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <i className="ri-loader-4-line animate-spin"></i>
+                Logging in...
+              </span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
-        <div className="mt-4 text-center">
-          <p>Don't have an account? <Link className="text-blue-600" href='/register'>Register</Link> </p>
+        <div className="mt-6 text-center">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
+            <Link className="text-cyan-600 font-semibold hover:underline" href='/register'>
+              Register
+            </Link>
+          </p>
         </div>
       </div>
     </div>

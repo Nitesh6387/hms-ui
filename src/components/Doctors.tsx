@@ -16,8 +16,8 @@ export default function Doctors() {
     }
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-3xl font-bold text-center text-gray-900">Meet Our Expert Doctors</h1>
-            <p className="text-center text-gray-600 mb-6">Providing exceptional care with years of experience</p>
+            {/* <h1 className="text-3xl font-bold text-center text-gray-900">Meet Our Expert Doctors</h1>
+            <p className="text-center text-gray-600 mb-6">Providing exceptional care with years of experience</p> */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {doctorsList.map((doctor) => (
                     <div key={doctor.id} className="bg-white p-6 rounded-lg shadow-lg border border-gray-300 text-center transition duration-300 hover:shadow-2xl hover:scale-105">

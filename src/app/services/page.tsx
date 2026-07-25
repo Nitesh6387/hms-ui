@@ -1,8 +1,9 @@
+"use client"
 import Services from '@/components/Services'
 import UserLayout from '@/components/UserLayout'
 import React from 'react'
 
-function page() {
+const page = () => {
     return (
         <UserLayout>
             <Services />
@@ -10,4 +11,4 @@ function page() {
     )
 }
 
-export default page
+export default page;

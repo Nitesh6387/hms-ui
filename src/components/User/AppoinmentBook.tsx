@@ -26,19 +26,20 @@ const Appointment = () => {
     const token = user?.jwtToken;
     const [departmentData, setDepartmentData] = useState([])
     const [doctorData, setDoctorData] = useState([])
-    const [slecteddepId, setSelectedDepartmentId] = useState(null)
+    const [slecteddepId, setSelectedDepartmentId] = useState("")
     const fetchDepartmentData = async () => {
         const result = await fetchDepartmentdata(token)
         setDepartmentData(result.data)
     }
-    const fetchDoctorByDeptId = async () => {
-        const res = await getdoctByDepartmentIDService(slecteddepId, token)
-        setDoctorData(res?.data)
+    const fetchDoctorByDeptId = async (deptId: string) => {
+        if (!deptId) return;
+        const res = await getdoctByDepartmentIDService(deptId, token)
+        setDoctorData(res?.data || [])
     }
 
     useEffect(() => {
         if (slecteddepId) {
-            fetchDoctorByDeptId()
+            fetchDoctorByDeptId(slecteddepId)
         }
     }, [slecteddepId])
     useEffect(() => {

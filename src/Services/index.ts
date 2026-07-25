@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASEURL = `http://localhost:9000`;
+export const BASEURL = `http://localhost:9001`;
 
 // ---------- Axios interceptor for 401 ----------
 axios.interceptors.response.use(
@@ -252,6 +252,12 @@ export const rescheduleAppointment = async (id: string, payload: { date: string;
   const response = await axios.put(`${BASEURL}/v1/api/patient/appointment/${id}/reschedule`, payload, {
     headers: { Authorization: `Bearer ${token}` },
   });
+  return response?.data;
+};
+
+// ========== CONTACT ==========
+export const sendContactMessage = async (payload: { name: string; email: string; phone: string; message: string }) => {
+  const response = await axios.post(`${BASEURL}/v1/api/contact`, payload);
   return response?.data;
 };
 
